@@ -1,0 +1,19 @@
+name: Diagnose custom domain
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - name: Read Pages configuration and check domain from GitHub
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/diagnose_pages.py

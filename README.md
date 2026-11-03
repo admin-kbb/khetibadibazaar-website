@@ -81,3 +81,9 @@ Provider references: [OpenAI](https://developers.openai.com/api/docs/bots), [Ant
 The logo is an unchanged copy of the current app's `frontend/assets/icons/app_icon.png`. The forest green (`#146c43`), harvest accent (`#c58b2a`), Poppins typography and warm surfaces follow the app's visual language.
 
 The five category WebP files are the app's generated editorial category artwork. They illustrate categories and are not actual sale listings. Legacy seed photographs were not used because their original licensing metadata is incomplete. Poppins font files are bundled with their SIL Open Font License in `site/assets/fonts/OFL-Poppins.txt`. All site assets are local; no third-party font or image request is needed.
+
+## Diagnose a custom-domain error
+
+After committing and pushing `.github/workflows/diagnose-pages.yml` and `scripts/diagnose_pages.py`, open **Actions → Diagnose custom domain → Run workflow** on `main`. Open the completed run's summary to see DNS, HTTP headers, HTTPS errors and the Pages certificate state as observed from GitHub's network. Failed connectivity checks are recorded in the report so one failure does not hide the rest.
+
+This manual workflow has only `contents: read` and `pages: read`. It does not publish the site, modify settings or request a personal access token. It uses the runner's temporary token to read selected Pages configuration fields. GitHub's separate `/pages/health` endpoint requires Administration and Pages write permissions, so the diagnostic deliberately does not call it or broaden permissions. The output can help distinguish stale DNS answers, network reachability and certificate provisioning issues, but it cannot clear GitHub's internal caches.
