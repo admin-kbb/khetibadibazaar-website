@@ -1,0 +1,44 @@
+# Kheti Badi Bazaar: AI crawling and training opt-out.
+# Applies to this website host only, including pages, images and other assets.
+# These are voluntary crawler instructions, not authentication or a firewall.
+
+# Keep ordinary search indexing and social link previews available.
+User-agent: *
+Allow: /
+
+# OpenAI: model training, AI search and user-directed retrieval.
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+Disallow: /
+
+# Anthropic: model training, AI search and user-directed retrieval.
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+Disallow: /
+
+# Google and Apple model-training/use controls; ordinary search stays allowed.
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+Disallow: /
+
+# Common Crawl datasets.
+User-agent: CCBot
+Disallow: /
+
+# Perplexity AI search and user-directed retrieval.
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+Disallow: /
+
+# Amazon model training, AI search and user-directed retrieval.
+User-agent: Amazonbot
+User-agent: Amzn-SearchBot
+User-agent: Amzn-User
+Disallow: /
+
+# Meta AI collection and retrieval (separate from social link previews).
+User-agent: meta-externalagent
+User-agent: meta-externalfetcher
+Disallow: /

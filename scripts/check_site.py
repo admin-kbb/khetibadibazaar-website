@@ -2,6 +2,7 @@
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
+from urllib.robotparser import RobotFileParser
 import re
 import sys
 
@@ -63,7 +64,36 @@ for path in ROOT.rglob('*.css'):
 for name in ('machinery', 'crops', 'cattle', 'seeds', 'farming_land'):
     if not (ROOT / f'assets/{name}.webp').is_file(): errors.append(f'Missing category image: {name}')
 if len(pages) < 3: errors.append('Expected Home, About and Future pages')
+
+# Check actual crawler decisions, including assets, rather than just file presence.
+# This is local parsing only: no website or crawler is contacted.
+robots_path = ROOT / 'robots.txt'
+if not robots_path.is_file():
+    errors.append('Missing robots.txt in the published website root')
+else:
+    robots = RobotFileParser()
+    robots.parse(robots_path.read_text().splitlines())
+    ai_agents = (
+        'GPTBot', 'OAI-SearchBot', 'ChatGPT-User',
+        'ClaudeBot', 'Claude-SearchBot', 'Claude-User',
+        'Google-Extended', 'Applebot-Extended', 'CCBot',
+        'PerplexityBot', 'Perplexity-User',
+        'Amazonbot', 'Amzn-SearchBot', 'Amzn-User',
+        'meta-externalagent', 'meta-externalfetcher',
+    )
+    public_paths = ('/', '/index.html', '/about.html', '/future.html', '/assets/logo.png')
+    for agent in ai_agents:
+        # RobotFileParser takes the crawler product token, not a browser header.
+        for user_agent in (agent, f'{agent}/1.0', agent.lower()):
+            for public_path in public_paths:
+                if robots.can_fetch(user_agent, public_path):
+                    errors.append(f'robots.txt permits AI crawler {user_agent} on {public_path}')
+    for agent in ('Googlebot', 'bingbot', 'Applebot', 'facebookexternalhit', 'UnknownCrawler'):
+        for public_path in public_paths:
+            if not robots.can_fetch(agent, public_path):
+                errors.append(f'robots.txt unexpectedly blocks ordinary crawler {agent} on {public_path}')
+
 if errors:
     print('\n'.join(errors), file=sys.stderr)
     sys.exit(1)
-print(f'Validated {len(pages)} pages, local links, fragments, image text and public assets.')
+print(f'Validated {len(pages)} pages, local links, fragments, image text, public assets and AI crawler policy.')

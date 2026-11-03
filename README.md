@@ -58,6 +58,24 @@ The full content is in HTML and stays readable without JavaScript. Add official 
 
 The site deliberately has no collection forms, tracking, cookies, local storage, payments or backend requests. Hosting providers may independently retain request logs. If data collection is added later, prepare the appropriate privacy information before enabling it.
 
+## AI crawler preferences
+
+`site/robots.txt` asks the listed AI training crawlers, AI search bots and AI retrieval agents not to crawl any website page or asset. Ordinary search engines and social link previews remain allowed. This is an opt-out for known agents, not a universal way to identify AI traffic. Review the list periodically as providers change their crawler names.
+
+The workflow already publishes this file with the rest of `site/`. After you push and publication completes, confirm that **https://khetibadibazaar.com/robots.txt** returns HTTP 200 and the actual plain-text rules, rather than HTML or a 404. Requests to `www` should redirect to the configured primary domain. At the default GitHub project URL, the file is under `/khetibadibazaar-website/robots.txt`; crawlers look for `/robots.txt` at the host root, so the policy depends on the custom domain serving this site at its root.
+
+`python3 scripts/check_site.py` checks that named AI agents are disallowed on pages and image assets, including versioned user-agent strings, while ordinary crawlers remain allowed. No network access is needed for these checks.
+
+### Scope and limits
+
+- Robots rules are voluntary and do not stop noncompliant scrapers, spoofed user agents, copying by visitors, or use of previously collected content. Some user-directed AI fetchers may ignore robots rules.
+- This file applies only to this website's host. It does **not** protect the Flutter app, `api.khetibadibazaar.com`, `dev.khetibadibazaar.com`, or this public GitHub repository. Sensitive app/API content must be protected by server-side authentication and authorization; adding paths to robots.txt does not secure them.
+- Allowing ordinary search indexing does not guarantee exclusion from every search engine's AI features or downstream reuse. We have not disabled normal search snippets or indexing.
+- GitHub Pages serves static files. Stronger enforcement would need a proxy/CDN with bot controls and rate limits, alongside any application-level access controls. No DNS, hosting, API or cloud configuration has been changed here.
+- No `llms.txt` is added: it is intended to help AI systems discover content, not to enforce an opt-out. Unrecognised meta tags and unsupported hosting configuration files are not treated as protection.
+
+Provider references: [OpenAI](https://developers.openai.com/api/docs/bots), [Anthropic](https://privacy.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler), [Google](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers), [Apple](https://support.apple.com/en-au/119829), [Common Crawl](https://commoncrawl.org/ccbot), [Perplexity](https://docs.perplexity.ai/docs/resources/perplexity-crawlers), [Amazon](https://developer.amazon.com/docs/amazonbot/amazonbot.html), and [Meta](https://developers.facebook.com/docs/sharing/webmasters/web-crawlers).
+
 ## Branding and asset provenance
 
 The logo is an unchanged copy of the current app's `frontend/assets/icons/app_icon.png`. The forest green (`#146c43`), harvest accent (`#c58b2a`), Poppins typography and warm surfaces follow the app's visual language.
