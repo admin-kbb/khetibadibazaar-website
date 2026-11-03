@@ -22,7 +22,7 @@ if (menu && navigation) {
       menu.focus();
     }
   });
-  window.matchMedia('(min-width: 761px)').addEventListener('change', closeMenu);
+  window.matchMedia('(min-width: 901px)').addEventListener('change', closeMenu);
 }
 const categories = {
   machinery: ['Built for your next season.', 'From your first tractor to your next upgrade. Explore tractors, farm machinery and equipment in one place.', 'Illustrative farm tractor and machinery'],
